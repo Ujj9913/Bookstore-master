@@ -1,0 +1,64 @@
+<!-- views/add-book.ejs -->
+<%- include('partials/header', { pageTitle: pageTitle, user: user }) %>
+
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-lg border-0 mt-5">
+      <div class="card-body p-4">
+        <h2 class="text-center mb-4" style="font-family: 'Georgia', serif; color: #2c3e50;">Add a Book</h2>
+        <div id="addBookError" class="alert alert-danger" style="display: none;"></div>
+        <div id="addBookSuccess" class="alert alert-success" style="display: none;">Book added successfully!</div>
+        <form id="addBookForm">
+          <div class="mb-3">
+            <label for="bookName" class="form-label">Book Name</label>
+            <input type="text" class="form-control" id="bookName" name="bookName" placeholder="Enter book name" required>
+          </div>
+          <div class="mb-3">
+            <label for="coverImage" class="form-label">Cover Image URL</label>
+            <input type="text" class="form-control" id="coverImage" name="coverImage" placeholder="Enter image URL (e.g., https://example.com/cover.jpg)">
+            <img id="coverPreview" src="" alt="Cover Preview" class="img-fluid mt-2" style="display: none; max-height: 200px;">
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter book description"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="bookType" class="form-label">Book Type</label>
+            <select class="form-select" id="bookType" name="bookType" required>
+              <option value="" disabled selected>Select book type</option>
+              <option value="horror">Horror</option>
+              <option value="mystery">Mystery</option>
+              <option value="thriller">Thriller</option>
+              <option value="fantasy">Fantasy</option>
+              <option value="sci-fi">Sci-Fi</option>
+              <option value="romance">Romance</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" class="form-control" id="price" name="price" step="0.01" placeholder="Enter price" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Add Book</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ecf0f1, #dfe6e9);
+  }
+  .btn-primary {
+    background-color: #2c3e50;
+    border: none;
+    transition: background-color 0.3s;
+  }
+  .btn-primary:hover {
+    background-color: #f1c40f;
+  }
+</style>
+
+<script src="/js/add-books.js"></script>
+<%- include('partials/footer') %>

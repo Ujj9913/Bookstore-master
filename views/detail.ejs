@@ -1,0 +1,48 @@
+<!-- views/myBook-detail.ejs -->
+<%- include('partials/header', { pageTitle: pageTitle, user: user }) %>
+
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-lg border-0 mt-5">
+      <div class="card-body p-4">
+        <h2 class="text-center mb-4" style="font-family: 'Georgia', serif; color: #2c3e50;" id="myBookName">Loading...</h2>
+        <div id="myBookError" class="alert alert-danger" style="display: none;"></div>
+        <div class="text-center mb-3">
+          <img id="myBookCover" src="https://via.placeholder.com/150" alt="Cover Image" class="img-fluid" style="max-height: 300px;">
+        </div>
+        <div class="mb-3">
+          <strong>Type:</strong> <span id="myBookType">Loading...</span>
+        </div>
+        <div class="mb-3">
+          <strong>Price:</strong> <span id="myBookPrice">Loading...</span>
+        </div>
+        <div class="mb-3">
+          <strong>Description:</strong>
+          <p id="myBookDescription">Loading...</p>
+        </div>
+        <div class="mb-3">
+          <strong>Added By:</strong> <span id="myBookAddedBy">Loading...</span>
+        </div>
+        <a href="/myBooks" class="btn btn-secondary w-100">Back to MyBooks</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    border-radius: 15px;
+    background: linear-gradient(135deg, #ecf0f1, #dfe6e9);
+  }
+  .btn-secondary {
+    background-color: #2c3e50;
+    border: none;
+    transition: background-color 0.3s;
+  }
+  .btn-secondary:hover {
+    background-color: #f1c40f;
+  }
+</style>
+
+<script src="/js/detail.js"></script>
+<%- include('partials/footer') %>
