@@ -1,53 +1,59 @@
 <!-- views/myBook.ejs -->
 <%- include('partials/header', { pageTitle: pageTitle, user: user }) %>
+  <a href="/add-book" class="add-myBook-icon" title="Add a New MyBook">
+    <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="10" fill="#2c3e50" />
+      <path d="M12 6v12M6 12h12" stroke="#f1c40f" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  </a>
+  <div class="row justify-content-center">
 
-<div class="row justify-content-center">
-  <div class="col-12">
-    <h2 class="text-center mb-4" style="font-family: 'Georgia', serif; color: #2c3e50;">My myBook</h2>
-    <div id="myBookError" class="alert-rank alert-danger text-center" style="display: none;"></div>
-    <div id="myBookContainer" class="row row-cols-1 row-cols-md-3 g-4">
-      <!-- myBook will be dynamically populated here -->
+    <div class="col-12">
+      <h2 class="text-center mb-4" style="font-family: 'Georgia', serif; color: #2c3e50;">My myBook</h2>
+      <div id="myBookError" class="alert-rank alert-danger text-center" style="display: none;"></div>
+      <div id="myBookContainer" class="row row-cols-1 row-cols-md-3 g-4">
+        <!-- myBook will be dynamically populated here -->
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Floating Plus Icon -->
-<a href="/add-myBook" class="add-myBook-icon" title="Add a New MyBook">
-  <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="10" fill="#2c3e50"/>
-    <path d="M12 6v12M6 12h12" stroke="#f1c40f" stroke-width="2" stroke-linecap="round"/>
-  </svg>
-</a>
+  <!-- Floating Plus Icon -->
 
-<style>
-  .card {
-    border-radius: 15px;
-    background: linear-gradient(135deg, #ecf0f1, #dfe6e9);
-    transition: transform 0.2s;
-  }
-  .card:hover {
-    transform: scale(1.05);
-  }
-  .card-img-top {
-    height: 200px;
-    object-fit: cover;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-  }
-  .add-myBook-icon {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-    text-decoration: none;
-  }
-  .add-myBook-icon:hover circle {
-    fill: #f1c40f;
-  }
-  .add-myBook-icon:hover path {
-    stroke: #2c3e50;
-  }
-</style>
 
-<script src="/js/myBook.js"></script>
-<%- include('partials/footer') %>
+  <style>
+    .card {
+      border-radius: 15px;
+      background: linear-gradient(135deg, #ecf0f1, #dfe6e9);
+      transition: transform 0.2s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+
+    .add-myBook-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      text-decoration: none;
+    }
+
+    .add-myBook-icon:hover circle {
+      fill: #f1c40f;
+    }
+
+    .add-myBook-icon:hover path {
+      stroke: #2c3e50;
+    }
+  </style>
+
+  <script src="/js/myBook.js"></script>
+  <%- include('partials/footer') %>
