@@ -1,32 +1,58 @@
 <!-- views/partials/footer.ejs -->
- <style>
-  .main-content {
-    flex: 1;
-}
-
-/* Footer stays at the bottom */
-.footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px;
-}
- </style>
-</div> <!-- Closes container from header -->
-<footer class="bg-dark text-white text-center py-3 mt-5">
+</div> <!-- Closes content-wrapper from header -->
+<footer class="bg-dark text-white text-center py-3 mt-auto">
   <div class="container">
     <p>© <%= new Date().getFullYear() %> Book Swap. All rights reserved.</p>
-    <p>Explore the world of books with us!</p>
+    <p>Swap, read, and connect with book lovers!</p>
   </div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
-  function showLoader() {
-    document.getElementById('bookLoader').style.display = 'flex';
-    setTimeout(() => {
-      document.getElementById('bookLoader').style.display = 'none';
-    }, 2000); // Hides after 2 seconds; adjust as needed
+  function checkTokenExpiration() {
+    const token = localStorage.getItem('token');
+    const alertDiv = document.getElementById('tokenExpiredAlert');
+
+    if (!token) return;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const expiry = payload.exp * 1000;
+      const now = Date.now();
+
+      if (now >= expiry) {
+        if (alertDiv) {
+          alertDiv.style.display = 'block';
+          setTimeout(() => {
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+          }, 2000);
+        } else {
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }
+      }
+    } catch (err) {
+      console.error('Error decoding token:', err);
+      if (alertDiv) {
+        alertDiv.textContent = 'Invalid token on Book Swap. Redirecting to login...';
+        alertDiv.style.display = 'block';
+        setTimeout(() => {
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }, 2000);
+      } else {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
+    }
   }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    checkTokenExpiration();
+    setInterval(checkTokenExpiration, 60000);
+  });
 </script>
 </body>
+
 </html>

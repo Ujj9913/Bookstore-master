@@ -25,13 +25,13 @@ userSchema = new mongoose.Schema({
         default: false
     },
     created_at: {
-        type: Date      
+        type: Date
     },
     updated_at: {
         type: Date,
         default: new Date()
     },
-   
+
     country_code: {
         type: String,
         default: "+49"
@@ -44,13 +44,17 @@ userSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    interestedBooks: { 
-        type: [String], 
-        default: [] 
+    postcode: {
+        type: Number,
+        default: ""
+    },
+    interestedBooks: {
+        type: [String],
+        default: []
     },
     profile_img: {
-        type: String,
-        default: ""
+        data: Buffer,
+        contentType: String
     },
 })
 

@@ -97,23 +97,44 @@ module.exports = {
         const bookData = await bookModal.find(condition)
         if (bookData.length > 0) {
 
-            const userData = await userModel.findOne({ _id: user_id })
+            const sellerData = await userModel.findOne({ _id: bookData[0].addedBy })
 
 
-            if (userData) {
-                bookData[0].userName = userData.name
-                returnData = {
-                    bookName: bookData[0].bookName,
-                    coverImage: bookData[0].coverImage,
-                    description: bookData[0].description,
-                    price: bookData[0].price,
-                    addedBy: userData.name,
-                    admin: user_id === bookData.addedBy ? true : false,
-                    bookType: bookData[0].bookType,
+            if (sellerData) {
+                bookData[0].userName = sellerData.name
+                var admin = ObjectId(user_id).equals(bookData[0].addedBy) ? true : false
+                if (admin == true) {
+                    returnData = {
+                        bookName: bookData[0].bookName,
+                        coverImage: bookData[0].coverImage,
+                        description: bookData[0].description,
+                        price: bookData[0].price,
+                        addedBy: sellerData.name,
+                        admin: admin,
+                        bookType: bookData[0].bookType,
+                        sellerData: sellerData
+                    }
+                    sendData['ReturnCode'] = 200;
+                    sendData['Data'] = returnData;
+                    callback(sendData)
+                } else {
+                    const userData = await userModel.findOne({ _id: user_id })
+                    returnData = {
+                        bookName: bookData[0].bookName,
+                        coverImage: bookData[0].coverImage,
+                        description: bookData[0].description,
+                        price: bookData[0].price,
+                        addedBy: sellerData.name,
+                        admin: admin,
+                        bookType: bookData[0].bookType,
+                        sellerData: sellerData,
+                        userData: userData
+                    }
+                    sendData['ReturnCode'] = 200;
+                    sendData['Data'] = returnData;
+                    callback(sendData)
                 }
-                sendData['ReturnCode'] = 200;
-                sendData['Data'] = returnData;
-                callback(sendData)
+
             }
         } else {
             sendData['ReturnCode'] = 201;
@@ -163,6 +184,36 @@ module.exports = {
             sendData['ReturnMsg'] = "No book found";
             callback(sendData)
         }
+    },
+    DELETE: async function (data, callback) {
+        var sendData = {
+            ReturnCode: 200,
+            err: 0,
+            Data: {},
+            ReturnMsg: ""
+        };
+
+        const user_id = (data.userData.Data._id)
+        const book_id = (data.bookId.replace(/[^a-fA-F0-9]/g, ""));
+
+        const condition = {
+            _id: book_id
+        };
+
+        const deleteBook = await bookModal.remove(condition)
+        if (deleteBook.length > 0) {
+
+            sendData['ReturnCode'] = 200;
+            sendData['ReturnMsg'] = "Delete Book from this platform";
+            callback(sendData)
+
+        } else {
+            sendData['ReturnCode'] = 201;
+            sendData['err'] = 1;
+            sendData['ReturnMsg'] = "No book found";
+            callback(sendData)
+        }
+
     },
     ALLBOOK: async function (data, callback) {
         var sendData = {

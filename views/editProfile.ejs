@@ -1,0 +1,167 @@
+<!-- views/edit-profile.ejs -->
+<%- include('partials/header', { pageTitle: 'Edit Profile' , user: user }) %>
+
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-12 text-center mb-4">
+                <h1 class="display-4 fw-bold" style="font-family: 'Georgia', serif; color: #2c3e50;">Edit Profile</h1>
+                <p class="lead text-muted">Update your Book Swap profile</p>
+            </div>
+            <div class="col-md-10 col-lg-8">
+                <div class="card shadow-lg border-0"
+                    style="background: linear-gradient(135deg, #ffffff, #f8f9fa); border-radius: 20px;">
+                    <div class="card-body p-4">
+                        <div id="editProfileError" class="alert alert-danger rounded-3" style="display: none;"></div>
+                        <form id="editProfileForm">
+                            <div class="row align-items-center">
+                                <!-- Cartoon Logo Preview -->
+                                <div class="col-md-4 text-center">
+                                    <img id="profileImagePreview"
+                                        src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                                        alt="Profile Cartoon Preview" class="img-fluid rounded shadow-sm"
+                                        style="max-height: 250px; object-fit: cover;">
+                                    <p class="text-muted mt-2">Cartoon by Book Swap</p>
+                                    <div class="mt-2">
+                                        <label for="cartoonLogo" class="form-label text-dark fw-bold">Select Cartoon
+                                            Logo</label>
+                                        <select class="form-control" id="cartoonLogo" name="cartoonLogo">
+                                            <option value="cat">Playful Whiskers (Cat)</option>
+                                            <option value="dog">Happy Paws (Dog)</option>
+                                            <option value="rabbit">Fluffy Carrot (Rabbit)</option>
+                                            <option value="bear">Honey Snuggler (Bear)</option>
+                                            <option value="skybird">sky fly (skybird)</option>
+                                            <option value="seeAnimal">water lover (seeAnimal)</option>
+                                            <option value="pug">playable pet (Pug)</option>
+                                            <option value="lion">funny (Lion)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Form Fields -->
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <!-- Details -->
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="name" class="form-label text-dark fw-bold">Name</label>
+                                                <input type="text" class="form-control" id="name" name="name" value=""
+                                                    required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="number" class="form-label text-dark fw-bold">Phone
+                                                    Number</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">+49</span>
+                                                    <input type="text" class="form-control" id="number" name="number"
+                                                        value="" required>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="address"
+                                                    class="form-label text-dark fw-bold">Address</label>
+                                                <input type="text" class="form-control" id="address" name="address"
+                                                    value="">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="postcode" class="form-label text-dark fw-bold">Postal
+                                                    Code</label>
+                                                <input type="number" class="form-control" id="postcode" name="postcode"
+                                                    value="">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label text-dark fw-bold">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email"
+                                                    value="" readonly>
+                                            </div>
+                                        </div>
+                                        <!-- Interested Books -->
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="interestedBooks"
+                                                    class="form-label text-dark fw-bold">Interested Books</label>
+                                                <select multiple class="form-control" id="interestedBooks"
+                                                    name="interestedBooks" style="height: 150px;">
+                                                    <option value="Fiction">Fiction</option>
+                                                    <option value="Mystery">Mystery</option>
+                                                    <option value="Sci-Fi">Sci-Fi</option>
+                                                    <option value="Fantasy">Fantasy</option>
+                                                    <option value="Non-Fiction">Non-Fiction</option>
+                                                    <option value="Biography">Biography</option>
+                                                    <option value="Romance">Romance</option>
+                                                    <option value="Thriller">Thriller</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <button type="submit" class="btn btn-primary shadow-sm"
+                                    style="border-radius: 20px;">Save Changes</button>
+                                <a href="/profile" class="btn btn-secondary ms-2 shadow-sm"
+                                    style="border-radius: 20px;">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .card {
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            background-color: #2c3e50;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover,
+        .btn-secondary:hover {
+            background-color: #f1c40f;
+            color: #2c3e50;
+        }
+
+        .form-label {
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+            font-size: 1.1em;
+        }
+
+        h1 {
+            font-weight: 700;
+        }
+
+        select {
+            padding: 5px;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.25);
+        }
+
+        select[multiple] {
+            height: 150px;
+        }
+    </style>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <script src="/js/editProfile.js"></script>
+    <%- include('partials/footer') %>

@@ -137,6 +137,40 @@ module.exports = {
                     res.status(respData.ReturnCode).send(respData);
                 }
             });
+        app.delete('/api/book/:id',
+            header("authorization").not().isEmpty().trim(),
+            param("id").not().isEmpty().trim().isLength({ min: 24, })
+                .withMessage("please vaild id"),
+            async (req, res) => {
+                try {
+                    // Finds the validation errors in this request and wraps them in an object with handy functions
+                    const errors = validationResult(req);
+
+                    if (!errors.isEmpty()) {
+                        var respData = commonController.errorValidationResponse(errors);
+                        res.status(respData.ReturnCode).send(respData);
+                    } else {
+
+                        apiJwtController.DECODE(req, async function (userData) {
+                            if (userData.ReturnCode != 200) {
+                                res.status(userData.ReturnCode).send(userData);
+                            } else {
+
+                                var sendData = { bookId: req.params.id, userData: userData }
+                                bookApiController.DELETE(sendData, function (respData) {
+                                    console.log(respData);
+                                    res.status(respData.ReturnCode).send(respData);
+                                });
+                            }
+
+                        })
+
+                    }
+                } catch (err) {
+                    var respData = commonController.errorValidationResponse(err);
+                    res.status(respData.ReturnCode).send(respData);
+                }
+            });
         app.get('/api/allBook',
             async (req, res) => {
 

@@ -1,5 +1,14 @@
 // public/js/home.js
 document.addEventListener('DOMContentLoaded', () => {
+  let isLoggedIn = sessionStorage.getItem("loggedIn");
+
+  if (!isLoggedIn) {
+    // Show pop-up
+    alert("You need to log in to access this page.");
+
+    // Redirect to login page
+    window.location.href = "/login"; // Change to your actual login page URL
+  }
   const myBooksContainer = document.getElementById('myBooksContainer');
   const errorDiv = document.getElementById('myBooksError');
   const searchInput = document.getElementById('searchInput');
@@ -33,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                       <img src="${myBook.coverImage || 'https://via.placeholder.com/150'}" class="card-img-top" alt="${myBook.bookName}">
                       <div class="card-body text-center">
                         <h5 class="card-title">${myBook.bookName}</h5>
-                        <p class="card-text">$${myBook.price.toFixed(2)}</p>
+                        <p class="card-text">€${myBook.price.toFixed(2)}</p>
                       </div>
                     </div>
                   </a>

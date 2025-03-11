@@ -1,0 +1,557 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookSwap | Modern Book Sharing Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        .branding-header {
+            text-align: center;
+            padding: 0.5rem;
+
+        }
+
+        .branding-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .branding-header p {
+            font-size: 1.5rem;
+            color: #fff;
+            align-content: center;
+            font-weight: 400;
+        }
+
+        :root {
+            --primary: #2A2F4F;
+            --secondary: #917FB3;
+            --accent: #E5BEEC;
+            --dark: #0F0F1C;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(45deg, rgba(15, 15, 28, 0.9), rgba(42, 47, 79, 0.8)),
+                url('https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(233, 233, 233, 0.1) 0%, rgba(15, 15, 28, 0.8) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(20px);
+            background: var(--glass);
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4rem;
+            transform: translateY(0);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) perspective(1000px) rotateX(10deg);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .book-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+            color: #fff !important;
+            /* Override text color conflicts */
+        }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: ripple 6s infinite;
+            z-index: 0;
+        }
+
+        .book-card img {
+            border-radius: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .book-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .book-card .badge {
+            background-color: var(--primary) !important;
+            color: #fff !important;
+            /* Ensure badge text is white */
+        }
+
+        .book-card .rating {
+            color: #ffc107 !important;
+            /* Ensure rating text is yellow */
+        }
+
+        .how-it-works-step {
+            background: var(--glass);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .how-it-works-step:hover {
+            transform: scale(1.05);
+        }
+
+        .how-it-works-step i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .community-spotlight-card {
+            background: var(--glass);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .community-spotlight-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .cta-banner {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 2rem;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            opacity: 0.5;
+        }
+
+        .footer {
+            background: var(--primary);
+            padding: 3rem 0;
+            color: #fff;
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .btn-glow {
+            background: linear-gradient(45deg, var(--secondary), var(--accent));
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-glow:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(145, 127, 179, 0.4);
+        }
+
+        .parallax-element {
+            will-change: transform;
+            transition: transform 0.3s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                padding: 2rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .community-spotlight-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .book-card {
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .trending-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class=" hero-content branding-header">
+        <h1>BookSwap</h1>
+        <p>Unlock a World of Stories, Time to swap</p>
+    </header>
+    <!-- Hero Section -->
+    <section class="hero d-flex align-items-center">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="display-1 fw-bold mb-4 gradient-text">Swap Stories, <br>Share Adventures</h1>
+                <p class="lead fs-4 mb-5">Join a revolutionary platform for book lovers to exchange, discuss, and
+                    discover new worlds.</p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <a href="/signup" class="btn btn-glow">Get Started</a>
+                    <a href="#features" class="btn btn-outline-light rounded-pill px-4">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="py-5" id="features">
+        <div class="container">
+            <h2 class="display-4 mb-5 gradient-text text-center">Discover the Magic of BookSwap</h2>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="feature-card">
+                        <i class="fas fa-phone fa-3x gradient-text mb-4"></i>
+                        <h3 class="h2 mb-3">Direct Connection</h3>
+                        <p class=" ">Good change to connect with other book lover</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="feature-card">
+                        <i class="fas fa-user-circle fa-3x gradient-text mb-4"></i>
+                        <h3 class="h2 mb-3">Custom Avatars</h3>
+                        <p class=" ">Personalize your profile with adorable cartoon characters.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="feature-card">
+                        <i class="fas fa-exchange-alt fa-3x gradient-text mb-4"></i>
+                        <h3 class="h2 mb-3">Seamless Swapping</h3>
+                        <p class=" ">Exchange books with members worldwide effortlessly.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="display-4 mb-5 gradient-text text-center">How It Works</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="how-it-works-step">
+                        <i class="fas fa-user-plus"></i>
+                        <h4 class="mb-3">1. Sign Up</h4>
+                        <p class=" ">Create your account and set up your profile with a cute avatar.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="how-it-works-step">
+                        <i class="fas fa-book"></i>
+                        <h4 class="mb-3">2. Add Books</h4>
+                        <p class=" ">List the books you want to swap and browse others’ collections.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="how-it-works-step">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h4 class="mb-3">3. Swap </h4>
+                        <p class=" ">Connect with others, swap books.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Community Spotlight -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="display-4 mb-5 gradient-text text-center">Community Spotlight</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="community-spotlight-card">
+                        <img src="https://media-hosting.imagekit.io//ac657c487c5740de/rabbit.png?Expires=1835982694&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=Fx5SyFDl0zkJ4kogxVJEEn4dHhnFs~E~AoTWMbjfaWlN4VOHIl0CEKns~Gf1JqLfGhhBbZpvIxWWFBS12AF8MjsUSHga34R4~xPOTrPrMAv8rSuB2nLO5Kj5DP0OZVZ8LDsu4SWAHjZf~KnVOn-t7sEiISeBXUUsNCffp6VmAX2sHwT3aHDrgz5UFRuqlKSFFPcWoNXl~a1tQdGh09jQZnnDgzYEAfasRe7RKMUGM~dvpO4e-uOraSUZI3PrFzbD~BJ3pWUY7sm~~QKxQPwMp1bvVvjJ2I0VzUhQPr9Iu745PXEgGPJtof6e7MZy5CKdsLf1OhTqjhHmxTluRmHbRg__"
+                            alt="User Avatar">
+                        <div>
+                            <h5 class="mb-1">Alex Reader</h5>
+                            <p class=" mb-0">"I swapped my old fantasy novels for a thrilling sci-fi series
+                                and made new friends in the chat!"</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="community-spotlight-card">
+                        <img src="https://media-hosting.imagekit.io//d97b52f5826f4306/dog.png?Expires=1835982684&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=D~zVxjin86ZwZ8rbcEDu4G-KlzIIuyPLXuvZk94RYun4mr5qwADw8sUAoxJQ3z9QvGStFAjv32vXWE4D0GkGhAqan7ngWM93UPszoPLrAvjOBiXJfRvi661njJPZD7VzckNmL15oVhDiiyzrfZocLSzCMLG6SX48f~KmI5B0sGz2Zg9w7BTDLhIBEhLjNBpJkN2QfFAov-FLWdXCeqhMHTIxHSxaTdFqnOjTn6wv8kDYR1kxfgiWsmEw2SBnaDoxwWJAgx2T0gN8OtbwxV1sl0a6lrAP8NxrN5T3nrXIayAzAWVaoy4IX9oXJCwgSwxCJUbChBJzNWAJU56OAtXOOQ__"
+                            alt="User Avatar">
+                        <div>
+                            <h5 class="mb-1">Sarah Bookworm</h5>
+                            <p class="  mb-0">"The community here is amazing! I love the cute avatars and how
+                                easy it is to swap books."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="display-4 mb-5 gradient-text text-center">What Our Users Say</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://media-hosting.imagekit.io//4b8a81f7bd764109/dear.png?Expires=1835982674&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=nb78KpvqDwp98ImftA3s~za-Nv~HOYsIgFlGcCTqZwVGu9Y~xxCIZuX5MrGj5kg4jrN4O3QXLVFw1CudUOoPti9BSyvXU4Qm7WToopDVPE03LMNBb2UbuiFUvcrCY3QckcoqhnRjr5Csvyq6WGhnD~j6KKpeZ7ZqtrDYXryQuez9nNmhd2q-WEbRLAVHg8Yg88yQK-ip6vbybs90FQz5IabNksUowufkG6KUpIcozkpnfoF7tmyZb6dRxeyha581260ZBWGeE3G6dXMb9S8Po9P6O7h-DwH2VPn~h5Clg~KaX7rlwvXYbmUshDNiIyfOm~rDuFpmJ3Hdd4jCf2YB~A__"
+                                class="rounded-circle me-3" width="60" alt="User">
+                            <div>
+                                <h5 class="mb-0">Emma Watson</h5>
+                                <small class=" ">Book Collector</small>
+                            </div>
+                        </div>
+                        <p class="mb-0">"The most innovative book platform I've ever used!"</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://media-hosting.imagekit.io//cdf1a3c839054c09/bird.png?Expires=1835982497&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=pbiqPsV3E9QfPgBERqv0w3Sdj9st3Lbp3CzF8WLQ5FEDP2ajsWAtvv76YEBf3Lk~sVnXFp63bD4T1lXxeYep0-gI0HSK9hQGfIyPR1-fQ-~tRMxonS2r2uQG2aR~YH5yRN16QTiF5SaBJjcSxMK8eJAQ2SI2X9RyLu5FJvSN6OjJ9dqG6UWOtSz1obkpzLtQTkaXuYGaDtoo4sxYr5GZ01orLzE7TSYHaRridaRFM4k04d2QoQq8OOh~8P9asM4Nsn4r9jak~t~L-5UORA3DgYI8VNra34NP3DhXZ6nLeCwtH6-uy4fQHj-pXqTCZXd2asXZu91eSY1bgphAZFhQpA__"
+                                class="rounded-circle me-3" width="60" alt="User">
+                            <div>
+                                <h5 class="mb-0">John Smith</h5>
+                                <small class=" ">Avid Reader</small>
+                            </div>
+                        </div>
+                        <p class="mb-0">"I found rare editions I couldn’t get anywhere else."</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://media-hosting.imagekit.io//f896d1c965bf4921/smalldog.png?Expires=1835984672&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=R6Pia6cNw7r8w0Nc-UeNqcB86h6p6p9DIk8SSIro0JPrDNPq-Osku1NqqBKDnZblMlJIkMBfevEVzY5DqHq9He37nCoNeWhn3WlEAARk6oW8EjqfOj~hEsyXurkPv0yCWAZXSJ~FXWLr4CAL3m5QucvFnQQx5YBZzOyNYtwcnttqwtQ6Q3qMlYvF~ZJOSltgVCvDtY9LN7BZ1ctL1A3Ih4tWDCZKHek-eddbQkyVcC6j8bNTRMiG0w5iSvjzcwT8IZlMAST80jlco1NisVCDZGAYtXs1WvOySnVh8254EkEHg~vvEPi4nQ4LIv~rZN3AvZqsAEUuru53nnt88yTXrg__"
+                                class="rounded-circle me-3" width="60" alt="User">
+                            <div>
+                                <h5 class="mb-0">Lisa Brown</h5>
+                                <small class=" ">Book Seller</small>
+                            </div>
+                        </div>
+                        <p class="mb-0">"The Distance feature makes more easy to collect book."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="py-5">
+        <div class="container">
+            <div class="cta-banner">
+                <h2 class="display-4 gradient-text mb-4">Ready to Dive In?</h2>
+                <p class="lead fs-4 mb-5">Join thousands of book lovers today and start swapping stories!</p>
+                <a href="/signup" class="btn btn-glow">Join Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="gradient-text mb-3">BookSwap</h5>
+                    <p class=" ">A modern platform for book lovers to connect, swap, and share their passion
+                        for reading.</p>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5 class="mb-3">Explore</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="/community">Community</a></li>
+                        <li><a href="/about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5 class="mb-3">Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/terms">Terms</a></li>
+                        <li><a href="/privacy">Privacy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="mb-3">Stay Connected</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class=" "><i class="fab fa-twitter fa-2x"></i></a>
+                        <a href="#" class=" "><i class="fab fa-instagram fa-2x"></i></a>
+                        <a href="#" class=" "><i class="fab fa-facebook fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <p class="mb-0">© 2025 BookSwap. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const elements = document.querySelectorAll('.parallax-element');
+            const sensitivity = 30;
+
+            elements.forEach(element => {
+                const x = (window.innerWidth - e.pageX * sensitivity) / 100;
+                const y = (window.innerHeight - e.pageY * sensitivity) / 100;
+                element.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+    </script>
+</body>
+
+</html>

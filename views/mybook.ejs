@@ -1,17 +1,12 @@
 <!-- views/myBook.ejs -->
 <%- include('partials/header', { pageTitle: pageTitle, user: user }) %>
-  <a href="/add-book" class="add-myBook-icon" title="Add a New MyBook">
-    <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="12" cy="12" r="10" fill="#2c3e50" />
-      <path d="M12 6v12M6 12h12" stroke="#f1c40f" stroke-width="2" stroke-linecap="round" />
-    </svg>
-  </a>
-  <div class="row justify-content-center">
 
-    <div class="col-12">
-      <h2 class="text-center mb-4" style="font-family: 'Georgia', serif; color: #2c3e50;">My myBook</h2>
+  <div class="row justify-content-center mt-4">
+
+    <div class="col-12 pd-2">
+      <h2 class="text-center mb-4 pd-2" style="font-family: 'Georgia', serif; color: #2c3e50;">My Books</h2>
       <div id="myBookError" class="alert-rank alert-danger text-center" style="display: none;"></div>
-      <div id="myBookContainer" class="row row-cols-1 row-cols-md-3 g-4">
+      <div id="myBookContainer" class="row row-cols-1 row-cols-md-4 g-4 pd-2 mb-4">
         <!-- myBook will be dynamically populated here -->
       </div>
     </div>

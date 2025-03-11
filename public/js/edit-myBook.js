@@ -1,95 +1,109 @@
-// public/js/edit-myBook.js
+// public/js/edit-profile.js
 document.addEventListener('DOMContentLoaded', async () => {
-    const myBookName = document.getElementById('myBookName');
-    const coverImage = document.getElementById('coverImage');
-    const coverPreview = document.getElementById('coverPreview');
-    const description = document.getElementById('description');
-    const myBookType = document.getElementById('myBookType');
-    const price = document.getElementById('price');
-    const errorDiv = document.getElementById('editMyBookError');
-    const successDiv = document.getElementById('editMyBookSuccess');
+    const profileImagePreview = document.getElementById('profileImagePreview');
+    const nameInput = document.getElementById('name');
+    const numberInput = document.getElementById('number');
+    const addressInput = document.getElementById('address');
+    const postcodeInput = document.getElementById('postcode');
+    const emailInput = document.getElementById('email');
+    const interestedBooksSelect = document.getElementById('interestedBooks');
+    const editProfileForm = document.getElementById('editProfileForm');
+    const editProfileError = document.getElementById('editProfileError');
     const token = localStorage.getItem('token');
 
     if (!token) {
-        errorDiv.textContent = 'You must be logged in to edit a myBook.';
-        errorDiv.style.display = 'block';
+        editProfileError.textContent = 'You must be logged in to edit your profile.';
+        editProfileError.style.display = 'block';
         return;
     }
 
-    // Get myBook ID from URL (e.g., /edit-myBook/:id)
-    const myBookId = window.location.pathname.split('/').pop();
-
-    // Fetch current book data
+    // Fetch and populate initial data
     try {
-        const response = await fetch(`/api/book/${myBookId}`, {
+        const response = await fetch('/api/profile', {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
-
         const data = await response.json();
-        console.log(data);
+        console.log('dtaaaaa><>', data);
 
-        if (data.ReturnCode === 200) {
-            const myBook = data.Data;
-            myBookName.value = myBook.bookName;
-            coverImage.value = myBook.coverImage || '';
-            description.value = myBook.description || '';
-            myBookType.value = myBook.bookType;
-            price.value = myBook.price.toFixed(2);
-            if (myBook.coverImage) {
-                coverPreview.src = myBook.coverImage;
-                coverPreview.style.display = 'block';
+        if (data.ReturnCode == 200) {
+            const user = data.Data;
+            // Use random profile image if profile_img is empty
+            profileImagePreview.src = user.profile_img || `https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png`;
+            nameInput.value = user.name || '';
+            numberInput.value = user.number || '';
+            addressInput.value = user.address || '';
+            postcodeInput.value = user.postcode || '';
+            emailInput.value = user.email || '';
+
+            // Pre-select interested books
+            if (user.interestedBooks && user.interestedBooks.length > 0) {
+                const options = interestedBooksSelect.options;
+                for (let i = 0; i < options.length; i++) {
+                    if (user.interestedBooks.includes(options[i].value)) {
+                        options[i].selected = true;
+                    }
+                }
             }
+
+            editProfileError.style.display = 'none';
         } else {
-            errorDiv.textContent = data.message || 'Failed to load myBook data.';
-            errorDiv.style.display = 'block';
+            editProfileError.textContent = data.message || 'Failed to load profile data.';
+            editProfileError.style.display = 'block';
         }
     } catch (err) {
-        errorDiv.textContent = 'Error loading myBook data.';
-        errorDiv.style.display = 'block';
-        console.error('Edit myBook fetch error:', err);
+        editProfileError.textContent = 'Error loading profile data.';
+        editProfileError.style.display = 'block';
+        console.error('Initial data fetch error:', err);
     }
 
-    // Handle form submission
-    document.getElementById('editMyBookForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    // Preview image on upload
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                profileImagePreview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 
-        const updatedMyBook = {
-            myBookName: myBookName.value,
-            coverImage: coverImage.value,
-            description: description.value,
-            myBookType: myBookType.value,
-            price: parseFloat(price.value)
-        };
+    // Form submission
+    editProfileForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        editProfileError.style.display = 'none';
+
+        const formData = new FormData(editProfileForm);
+        const name = formData.get('name');
+        const number = formData.get('number');
+        const address = formData.get('address');
+        const postcode = formData.get('postcode');
+        const interestedBooks = Array.from(interestedBooksSelect.selectedOptions).map(option => option.value);
+
+        // Update formData with interestedBooks as an array
+        formData.set('interestedBooks', interestedBooks.join(','));
 
         try {
-            const response = await fetch(`/api/book/${myBookId}`, {
+            const response = await fetch('/api/profile', {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(updatedMyBook)
+                headers: { 'Authorization': `Bearer ${token}` },
+                body: formData
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                successDiv.style.display = 'block';
-                errorDiv.style.display = 'none';
-                setTimeout(() => {
-                    window.location.href = `/book/${myBookId}`;
-                }, 1500);
+                alert('Profile updated successfully!');
+                window.location.href = '/profile'; // Redirect back to profile page
             } else {
-                errorDiv.textContent = data.message || 'Failed to update myBook.';
-                errorDiv.style.display = 'block';
+                editProfileError.textContent = data.message || 'Failed to update profile.';
+                editProfileError.style.display = 'block';
             }
         } catch (err) {
-            errorDiv.textContent = 'Error updating myBook.';
-            errorDiv.style.display = 'block';
-            console.error('Update myBook error:', err);
+            editProfileError.textContent = 'Error updating profile.';
+            editProfileError.style.display = 'block';
+            console.error('Update error:', err);
         }
     });
 });

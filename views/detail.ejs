@@ -1,58 +1,157 @@
-<!-- views/myBook-detail.ejs -->
 <%- include('partials/header', { pageTitle: pageTitle, user: user }) %>
 
-  <div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-      <div class="card shadow-lg border-0 mt-5">
-        <div class="card-body p-4">
-          <h2 class="text-center mb-4" style="font-family: 'Georgia', serif; color: #2c3e50;" id="myBookName">Loading...
-          </h2>
-          <div id="myBookError" class="alert alert-danger" style="display: none;"></div>
-          <div class="text-center mb-3">
-            <img id="myBookCover" src="https://via.placeholder.com/150" alt="Cover Image" class="img-fluid"
-              style="max-height: 300px;">
-          </div>
-          <div class="mb-3">
-            <strong>Type:</strong> <span id="myBookType">Loading...</span>
-          </div>
-          <div class="mb-3">
-            <strong>Price:</strong> <span id="myBookPrice">Loading...</span>
-          </div>
-          <div class="mb-3">
-            <strong>Description:</strong>
-            <p id="myBookDescription">Loading...</p>
-          </div>
-          <div class="mb-3">
-            <strong>Added By:</strong> <span id="myBookAddedBy">Loading...</span>
-          </div>
-          <div class="mt-3 d-flex justify-content-between">
-            <div>
-              <button id="editBtn" class="btn btn-warning me-2">Edit</button>
-              <button id="deleteBtn" class="btn btn-danger">Delete</button>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-9 col-lg-9">
+        <div class="card shadow-lg border-0 rounded-lg">
+          <div class="card-body p-4">
+
+            <h2 class="text-center mb-4" id="myBookName" style="font-family: 'Georgia', serif; color: #34495e;">
+              Loading...</h2>
+            <div id="myBookError" class="alert alert-danger" style="display: none;"></div>
+            <div class="container mt-5">
+              <div class="row justify-content-center">
+                <div class="col-md-2 col-lg-6">
+                  <img id="myBookCover"
+                    src="https://images.pexels.com/photos/1148399/pexels-photo-1148399.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                    alt="Cover Image" class="img-fluid rounded shadow-sm" style="max-height: 300px;">
+                </div>
+                <div class="book-info col-md-8 col-lg-6">
+                  <p><strong>Type:</strong> <span id="myBookType">Loading...</span></p>
+                  <p><strong>Price:</strong> <span id="myBookPrice">Loading...</span></p>
+                  <p><strong>Description:</strong></p>
+                  <p id="myBookDescription" class="text-muted">Loading...</p>
+                </div>
+              </div>
+
             </div>
-            <a href="/myBooks" class="btn btn-secondary">Back to MyBooks</a>
+
+
+            <div id="admin" hidden class="mt-3 d-flex justify-content-between">
+              <div>
+                <button id="editBtn" onclick="editBook()" class="btn btn-warning me-2 shadow-sm">Edit</button>
+                <button id="deleteBtn" onclick="deleteBook()" class="btn btn-danger shadow-sm">Delete</button>
+              </div>
+              <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      Are you sure you want to delete this book? This action cannot be undone.
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <button type="button" id="confirmDelete" class="btn btn-danger">Yes, Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <a href="/" class="btn btn-secondary shadow-sm">Back to Books</a>
+            </div>
+            <div id="common" class="text-center">
+              <a href="/myBook" class="btn btn-primary shadow-sm">Back to MyBooks</a>
+            </div>
           </div>
         </div>
+      </div>
+
+      <!-- Book Owner Details -->
+      <div id="owerDetail" class="col-md-4 col-lg-3">
+        <div class="card shadow-lg border-0 rounded-lg">
+          <div class="card-body p-4 text-center">
+            <h4 class="mb-3" style="color: #34495e;">Book Owner</h4>
+            <p><strong>Name:</strong> <span id="bookOwnerName">Loading...</span></p>
+            <p><strong>Email:</strong> <span id="bookOwnerEmail">Loading...</span></p>
+            <p><strong>Phone:</strong> <span id="bookOwnerPhone">Loading...</span></p>
+            <p><strong>Address:</strong> <span id="bookOwnerAddress">Loading...</span></p>
+            <!-- Map and Distance -->
+            <div class="mt-4">
+              <div id="map" style="height: 200px; width: 100%; border-radius: 10px; overflow: hidden;"></div>
+              <p id="distanceLabel" class="mt-2 text-muted">How far from seller: Calculating...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Online Reviews Section -->
+    <div class="card shadow-lg border-0 rounded-lg mt-4">
+      <div class="card-body p-4">
+        <h3 class="text-center mb-4" style="color: #34495e;">Online Information</h3>
+        <div id="reviewsContainer"></div>
       </div>
     </div>
   </div>
 
   <style>
+    body {
+      background: #f5f7fa;
+    }
+
     .card {
       border-radius: 15px;
-      background: linear-gradient(135deg, #ecf0f1, #dfe6e9);
+      background: linear-gradient(135deg, #ffffff, #ecf0f3);
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.5);
+      margin-bottom: 2%;
+    }
+
+    .btn {
+      transition: all 0.3s ease-in-out;
+      border-radius: 25px;
+    }
+
+    .btn-primary {
+      background: #2980b9;
+      border: none;
+    }
+
+    #myBookCover {
+      height: 100%;
+      width: 50%;
+      align-self: center;
+    }
+
+    .btn-primary:hover {
+      background: #1f618d;
     }
 
     .btn-secondary {
-      background-color: #2c3e50;
+      background: #34495e;
       border: none;
-      transition: background-color 0.3s;
     }
 
     .btn-secondary:hover {
-      background-color: #f1c40f;
+      background: #f1c40f;
+      color: #fff;
+    }
+
+    .btn-warning {
+      background: #f39c12;
+      border: none;
+    }
+
+    .btn-danger {
+      background: #e74c3c;
+      border: none;
+    }
+
+    .book-info p {
+      font-size: 16px;
+      color: #2c3e50;
+    }
+
+    .book-info strong {
+      color: #2980b9;
     }
   </style>
+
+  <!-- OpenLayers for Map (instead of Google Maps) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.3.0/ol.css">
+  <script src="https://cdn.jsdelivr.net/npm/ol@v7.3.0/dist/ol.js"></script>
 
   <script src="/js/detail.js"></script>
   <%- include('partials/footer') %>
