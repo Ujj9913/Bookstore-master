@@ -44,10 +44,11 @@ module.exports = {
                     } else {
                         //calling controller function
                         var data = req.query;
-                        console.log(data);
+
 
                         userApiController.VERIFY_REGISTER_ACCOUNT(data, function (respData) {
-                            res.status(respData.ReturnCode).send(respData)
+                            res.render("confirmation", { pageTitle: 'confirmation email', respData: respData });
+
                         });
                     }
                 } catch (err) {

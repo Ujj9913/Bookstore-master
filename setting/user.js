@@ -16,13 +16,6 @@ module.exports = {
             res.render('editProfile', { pageTitle: 'Profile', user: null });
         })
 
-        app.get('/api/verifyemail/', async (req, res) => {
-            const token = req.query.token;
 
-
-            // Token is valid, render confirmation page
-            res.render("confirmation", { pageTitle: 'confirmation email', user: null });
-
-        })
     }
 }

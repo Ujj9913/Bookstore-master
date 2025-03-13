@@ -70,44 +70,6 @@
   </style>
 </head>
 
-<script>
-
-  document.addEventListener("DOMContentLoaded", function () {
-
-    const navItems = document.getElementById("navItems");
-    const token = localStorage.getItem("token"); // Retrieve token from localStorage
-    const alertBox = document.getElementById("tokenExpiredAlert");
-    let links = `
-      <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-    `;
-
-    if (token) {
-      // User is logged in
-      links += `
-        <li class="nav-item"><a class="nav-link" href="/add-book">Add Book</a></li>
-        <li class="nav-item"><a class="nav-link" href="/myBook">My Books</a></li>
-        <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Logout</a></li>
-      `;
-      alertBox.style.display = "none";
-    } else {
-      // User is not logged in
-
-      links += `
-        <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-        <li class="nav-item"><a class="nav-link" href="/signup">Signup</a></li>
-      `;
-
-    }
-
-    navItems.innerHTML = links;
-  });
-
-  function logout() {
-    localStorage.removeItem("token"); // Remove token from localStorage
-    window.location.href = "/login"; // Redirect to login page
-  }
-</script>
 
 <body>
 
@@ -129,5 +91,40 @@
   </nav>
 
 </body>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const navItems = document.getElementById("navItems");
+    const token = localStorage.getItem("token"); // Retrieve token from localStorage
+    const alertBox = document.getElementById("tokenExpiredAlert");
+    let links = `
+      <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+    `;
+
+    if (token) {
+      // User is logged in
+      links += `
+        <li class="nav-item"><a class="nav-link" href="/add-book">Add Book</a></li>
+        <li class="nav-item"><a class="nav-link" href="/myBook">My Books</a></li>
+        <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Logout</a></li>
+      `;
+    } else {
+      // User is not logged in
+
+      links += `
+        <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+        <li class="nav-item"><a class="nav-link" href="/signup">Signup</a></li>
+      `;
+
+    }
+
+    navItems.innerHTML = links;
+  });
+
+  function logout() {
+    localStorage.removeItem("token"); // Remove token from localStorage
+    window.location.href = "/login"; // Redirect to login page
+  }
+</script>
 
 </html>

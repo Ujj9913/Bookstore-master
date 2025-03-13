@@ -1,6 +1,6 @@
 // public/js/home.js
 document.addEventListener('DOMContentLoaded', () => {
-  let isLoggedIn = sessionStorage.getItem("loggedIn");
+  let isLoggedIn = localStorage.getItem("token");
 
   if (!isLoggedIn) {
     // Show pop-up
